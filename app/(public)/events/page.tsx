@@ -1,9 +1,9 @@
 import connectDB from "@/lib/db";
 import { Event } from "@/models";
 import EventCard from "@/components/public/EventCard";
-import { Trophy, Calendar, Download } from "lucide-react";
+import { Calendar } from "lucide-react";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function EventsPage() {
   await connectDB();
@@ -16,17 +16,23 @@ export default async function EventsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <div className="text-center space-y-2 max-w-2xl mx-auto">
         <span className="text-xs font-bold uppercase tracking-wider text-saffron-600">Championship Calendar</span>
-        <h1 className="text-3xl font-black text-navy-950">State Events & Tournament Results</h1>
+        <h1 className="text-3xl font-black text-navy-950">State Events & Championships</h1>
         <p className="text-xs text-slate-500">
-          Official selection trials, annual championships, and accredited referee/coaching seminars.
+          Official selection trials, state championships, and accredited sports events across Rajasthan.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {serializedEvents.map((event: any) => (
-          <EventCard key={event._id} event={event} />
-        ))}
-      </div>
+      {serializedEvents.length === 0 ? (
+        <div className="p-12 text-center text-slate-400 text-xs bg-white rounded-2xl border border-slate-200">
+          No scheduled events found at this time. Check back soon!
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {serializedEvents.map((event: any) => (
+            <EventCard key={event._id} event={event} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

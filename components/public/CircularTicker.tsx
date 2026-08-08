@@ -1,77 +1,75 @@
 import Link from "next/link";
-import { BellRing, FileText, Download, ArrowRight } from "lucide-react";
+import { Bell, Download, FileText } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 export interface CircularItem {
-  id: string;
+  id?: string;
+  _id?: string;
   title: string;
   fileUrl: string;
-  publishDate: Date | string;
-  isNew: boolean;
+  publishDate?: Date | string;
+  createdAt?: Date | string;
+  category?: string;
 }
 
-export default function CircularTicker({ circulars }: { circulars: CircularItem[] }) {
-  return (
-    <div className="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
-      {/* Header */}
-      <div className="bg-navy-900 text-white px-5 py-3.5 flex justify-between items-center border-b border-navy-800">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-saffron-500 flex items-center justify-center text-white shadow">
-            <BellRing className="w-4 h-4 animate-bounce" />
+export default function CircularTicker({ circulars }: { circulars?: CircularItem[] }) {
+  if (!circulars || circulars.length === 0) {
+    return (
+      <div className="bg-navy-900 border-y border-navy-800 text-white py-2.5 px-4 text-xs font-semibold">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="bg-saffron-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
+              <Bell className="w-3 h-3" /> OFFICIAL ANNOUNCEMENTS
+            </span>
           </div>
-          <div>
-            <h3 className="font-bold text-sm md:text-base tracking-tight">Recent Announcements & Circulars</h3>
-            <p className="text-[11px] text-slate-300">Official Association Orders, Trials & Rulebooks</p>
-          </div>
+          <p className="text-slate-300 text-xs">Official state circulars and event notifications will appear here.</p>
+          <Link href="/downloads" className="text-saffron-400 hover:underline shrink-0 text-xs font-bold">
+            View All
+          </Link>
         </div>
-        <Link
-          href="/downloads"
-          className="text-xs font-bold text-saffron-400 hover:text-saffron-300 flex items-center gap-1 bg-navy-800 px-3 py-1.5 rounded border border-navy-700 transition"
-        >
-          View All <ArrowRight className="w-3 h-3" />
-        </Link>
       </div>
+    );
+  }
 
-      {/* Announcements List */}
-      <div className="divide-y divide-slate-100 max-h-[320px] overflow-y-auto">
-        {circulars && circulars.length > 0 ? (
-          circulars.map((item) => (
-            <div
-              key={item.id}
-              className="p-4 hover:bg-slate-50 transition flex flex-col md:flex-row justify-between md:items-center gap-3 group"
-            >
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  {item.isNew && (
-                    <span className="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded tracking-wide animate-pulse">
-                      NEW
-                    </span>
-                  )}
-                  <span className="text-xs text-slate-500 font-medium">
-                    {formatDate(item.publishDate)}
-                  </span>
-                </div>
-                <h4 className="text-sm font-semibold text-navy-950 group-hover:text-saffron-600 transition leading-snug">
-                  {item.title}
-                </h4>
-              </div>
+  return (
+    <div className="bg-navy-900 border-y border-navy-800 text-white py-2.5 px-4 text-xs font-semibold">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="bg-saffron-500 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
+            <Bell className="w-3 h-3 animate-bounce" /> LATEST CIRCULARS
+          </span>
+        </div>
 
+        {/* Marquee or Scrolling Ticker */}
+        <div className="overflow-hidden relative flex-1 mx-4">
+          <div className="flex items-center space-x-8 animate-marquee whitespace-nowrap">
+            {circulars.map((c, idx) => (
               <a
-                href={item.fileUrl}
+                key={c._id || c.id || idx}
+                href={c.fileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 inline-flex items-center gap-1.5 bg-slate-100 hover:bg-saffron-50 text-navy-900 hover:text-saffron-600 border border-slate-200 px-3 py-1.5 rounded text-xs font-semibold transition"
+                className="inline-flex items-center gap-2 text-slate-200 hover:text-saffron-400 transition"
               >
-                <Download className="w-3.5 h-3.5" />
-                Download PDF
+                <FileText className="w-3.5 h-3.5 text-saffron-500" />
+                <span>{c.title}</span>
+                <span className="text-[10px] text-slate-400 font-mono">
+                  ({formatDate(c.publishDate || c.createdAt)})
+                </span>
+                <span className="bg-saffron-500/20 text-saffron-300 text-[9px] px-1.5 py-0.5 rounded border border-saffron-500/30 flex items-center gap-1">
+                  <Download className="w-3 h-3" /> PDF
+                </span>
               </a>
-            </div>
-          ))
-        ) : (
-          <div className="p-8 text-center text-slate-500 text-sm">
-            No active circulars at this moment.
+            ))}
           </div>
-        )}
+        </div>
+
+        <Link
+          href="/downloads"
+          className="text-saffron-400 hover:text-saffron-300 font-bold shrink-0 hover:underline text-xs flex items-center gap-1"
+        >
+          View All Downloads
+        </Link>
       </div>
     </div>
   );

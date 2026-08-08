@@ -5,19 +5,11 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { 
   LayoutDashboard, 
-  FileText, 
-  Users, 
   Calendar, 
-  Award, 
   Image as ImageIcon, 
   Download, 
-  Building2, 
-  CreditCard, 
-  Inbox, 
-  Settings, 
   LogOut, 
-  Trophy,
-  UserCheck
+  Trophy 
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -26,17 +18,9 @@ export default function AdminSidebar() {
 
   const navItems = [
     { label: "Overview", href: "/admin", icon: LayoutDashboard },
-    { label: "Registrations Queue", href: "/admin/registrations", icon: UserCheck },
-    { label: "Content (News & Slides)", href: "/admin/content", icon: FileText },
-    { label: "Office Bearers", href: "/admin/office-bearers", icon: Users },
-    { label: "Tournaments & Events", href: "/admin/events", icon: Calendar },
-    { label: "Players & Rankings", href: "/admin/players", icon: Award },
-    { label: "Gallery (Media)", href: "/admin/gallery", icon: ImageIcon },
     { label: "Circulars & Downloads", href: "/admin/downloads", icon: Download },
-    { label: "Academies & Units", href: "/admin/academies", icon: Building2 },
-    { label: "Payments Ledger", href: "/admin/payments", icon: CreditCard },
-    { label: "Contact Messages", href: "/admin/inbox", icon: Inbox },
-    { label: "Site Settings", href: "/admin/settings", icon: Settings },
+    { label: "Gallery (Media)", href: "/admin/gallery", icon: ImageIcon },
+    { label: "Tournaments & Events", href: "/admin/events", icon: Calendar },
   ];
 
   return (

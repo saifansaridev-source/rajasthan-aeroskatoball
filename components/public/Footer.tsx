@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { Trophy, MapPin, Mail, Phone, ExternalLink, ShieldCheck, Heart } from "lucide-react";
+import { Trophy, MapPin, Mail, Phone, Lock } from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-navy-950 text-slate-300 pt-12 pb-6 border-t-4 border-saffron-500">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
         
         {/* Col 1: About & Incorporation */}
         <div className="space-y-4">
@@ -29,47 +29,19 @@ export default function Footer() {
         {/* Col 2: Quick Links */}
         <div>
           <h4 className="text-white text-sm font-bold tracking-wider uppercase mb-4 pb-2 border-b border-navy-800 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-saffron-500"></span> Navigation
+            <span className="w-2 h-2 rounded-full bg-saffron-500"></span> Quick Navigation
           </h4>
           <ul className="space-y-2 text-xs">
+            <li><Link href="/" className="hover:text-saffron-400 transition">Home</Link></li>
             <li><Link href="/about" className="hover:text-saffron-400 transition">About the Association</Link></li>
-            <li><Link href="/office-bearers" className="hover:text-saffron-400 transition">Office Bearers & Executive Committee</Link></li>
-            <li><Link href="/events" className="hover:text-saffron-400 transition">Championships & Selection Trials</Link></li>
-            <li><Link href="/players" className="hover:text-saffron-400 transition">State Rankings & Leaderboards</Link></li>
-            <li><Link href="/academies" className="hover:text-saffron-400 transition">Approved District Academies</Link></li>
-            <li><Link href="/downloads" className="hover:text-saffron-400 transition">Circulars & Rulebooks</Link></li>
-            <li><Link href="/verify" className="hover:text-saffron-400 transition text-saffron-400 font-medium">Verify Player ID / Certificate</Link></li>
+            <li><Link href="/events" className="hover:text-saffron-400 transition">State Championships & Events</Link></li>
+            <li><Link href="/gallery" className="hover:text-saffron-400 transition">Media & Photo Gallery</Link></li>
+            <li><Link href="/downloads" className="hover:text-saffron-400 transition">Circulars & Downloads</Link></li>
+            <li><Link href="/contact" className="hover:text-saffron-400 transition">Contact Us</Link></li>
           </ul>
         </div>
 
-        {/* Col 3: Registration Portals */}
-        <div>
-          <h4 className="text-white text-sm font-bold tracking-wider uppercase mb-4 pb-2 border-b border-navy-800 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-saffron-500"></span> Registration Portals
-          </h4>
-          <ul className="space-y-2.5 text-xs">
-            <li>
-              <Link href="/register?type=PLAYER" className="block bg-navy-900 hover:bg-navy-800 p-2 rounded border border-navy-800 text-slate-200">
-                <span className="font-semibold text-saffron-400 block">Annual Player Registration</span>
-                <span className="text-[11px] text-slate-400">For state athletes & trial participants</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/register?type=COACH" className="block bg-navy-900 hover:bg-navy-800 p-2 rounded border border-navy-800 text-slate-200">
-                <span className="font-semibold text-saffron-400 block">Coach & Referee Certification</span>
-                <span className="text-[11px] text-slate-400">Technical official licensing</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/register?type=ACADEMY" className="block bg-navy-900 hover:bg-navy-800 p-2 rounded border border-navy-800 text-slate-200">
-                <span className="font-semibold text-saffron-400 block">Academy & Unit Affiliation</span>
-                <span className="text-[11px] text-slate-400">District sports center registration</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Col 4: Registered Office & Contact */}
+        {/* Col 3: Registered Office & Contact */}
         <div>
           <h4 className="text-white text-sm font-bold tracking-wider uppercase mb-4 pb-2 border-b border-navy-800 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-saffron-500"></span> Registered Office
@@ -97,7 +69,7 @@ export default function Footer() {
                 href="/admin/login" 
                 className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white bg-navy-900 border border-navy-800 px-3 py-1.5 rounded"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-saffron-400" />
+                <Lock className="w-3.5 h-3.5 text-saffron-400" />
                 Staff Administration Login
               </Link>
             </li>
@@ -109,11 +81,6 @@ export default function Footer() {
       {/* Bottom Legal bar */}
       <div className="max-w-7xl mx-auto px-4 pt-6 border-t border-navy-900 text-xs flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400">
         <p>© {new Date().getFullYear()} Rajasthan Aeroskatoball Association. All Rights Reserved.</p>
-        <div className="flex gap-4">
-          <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
-          <Link href="/terms" className="hover:underline">Terms & Conditions</Link>
-          <Link href="/refunds" className="hover:underline">Payment & Refund Policy</Link>
-        </div>
       </div>
     </footer>
   );

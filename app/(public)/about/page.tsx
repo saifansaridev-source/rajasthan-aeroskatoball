@@ -1,26 +1,19 @@
-import connectDB from "@/lib/db";
-import { SiteSettings } from "@/models";
-import { ShieldCheck, Award, FileText, CheckCircle } from "lucide-react";
+import { ShieldCheck, Award, CheckCircle } from "lucide-react";
 
-export const revalidate = 3600;
-
-export default async function AboutPage() {
-  await connectDB();
-  const settings = await SiteSettings.findOne().lean();
-
+export default function AboutPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       {/* Header Banner */}
       <div className="bg-navy-950 text-white rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-xl border-t-4 border-saffron-500">
         <div className="max-w-3xl space-y-4">
           <span className="bg-saffron-500/20 text-saffron-400 font-bold text-xs px-3 py-1 rounded-full border border-saffron-500/30">
-            CIN: {settings?.cin || "U88900RJ2026NPL112235"}
+            CIN: U88900RJ2026NPL112235
           </span>
           <h1 className="text-3xl md:text-5xl font-black">
             Rajasthan Aeroskatoball Association
           </h1>
           <p className="text-slate-300 text-sm md:text-base leading-relaxed">
-            Official governing state sports organization dedicated to the promotion, regulation, and grassroots development of Aeroskatoball across all 50 districts of Rajasthan. Incorporated as a Section 8 Not-For-Profit entity under ROC Jaipur.
+            Official governing state sports organization dedicated to the promotion, regulation, and grassroots development of Aeroskatoball across Rajasthan. Incorporated as a Section 8 Not-For-Profit entity under ROC Jaipur.
           </p>
         </div>
       </div>
@@ -39,7 +32,7 @@ export default async function AboutPage() {
           <dl className="grid grid-cols-1 gap-3 pt-4 border-t border-slate-100 text-xs">
             <div className="flex justify-between py-1 border-b border-slate-50">
               <dt className="text-slate-400">Corporate ID (CIN):</dt>
-              <dd className="font-mono font-bold text-navy-950">{settings?.cin || "U88900RJ2026NPL112235"}</dd>
+              <dd className="font-mono font-bold text-navy-950">U88900RJ2026NPL112235</dd>
             </div>
             <div className="flex justify-between py-1 border-b border-slate-50">
               <dt className="text-slate-400">Registrar of Companies:</dt>
@@ -47,7 +40,7 @@ export default async function AboutPage() {
             </div>
             <div className="flex justify-between py-1 border-b border-slate-50">
               <dt className="text-slate-400">Registered Office:</dt>
-              <dd className="font-semibold text-navy-950 text-right max-w-xs">{settings?.registeredOffice}</dd>
+              <dd className="font-semibold text-navy-950 text-right max-w-xs">Bharatpur, Rajasthan - 321001</dd>
             </div>
           </dl>
         </div>
@@ -68,11 +61,11 @@ export default async function AboutPage() {
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span>Provide state team pathways to School Games Federation of India (SGFI) & National Games.</span>
+              <span>Provide state team pathways to School Games & National Championships.</span>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span>Maintain digital player registration, ranking indices, and instant certificate verification.</span>
+              <span>Maintain public transparency, official announcements, and technical rulebooks.</span>
             </li>
           </ul>
         </div>
