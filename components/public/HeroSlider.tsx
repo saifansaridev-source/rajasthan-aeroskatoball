@@ -17,16 +17,23 @@ export default function HeroSlider({ slides }: { slides?: SlideItem[] }) {
   const defaultSlides: SlideItem[] = [
     {
       title: "Rajasthan State Aeroskatoball Association",
-      subtitle: "Official Governing Body for Aeroskatoball Championships & Development across Rajasthan.",
+      subtitle: "Official Governing Body for Aeroskatoball Championships, Selection Trials & Athlete Development across Rajasthan.",
       imageUrl: "https://images.unsplash.com/photo-1547447134-cd3f5c716030?q=80&w=1600&auto=format&fit=crop",
-      ctaText: "Explore Tournaments",
+      ctaText: "Explore State Tournaments",
       ctaLink: "/events",
     },
     {
-      title: "Official Announcements & Circulars",
-      subtitle: "Access official guidelines, rulebooks, and state technical regulations.",
+      title: "Olympic Standards & High Performance Training",
+      subtitle: "Elevating Rajasthan's Skating & Skatoball talent to Olympic and International level competitions.",
       imageUrl: "https://images.unsplash.com/photo-1517649763962-0c623266010b?q=80&w=1600&auto=format&fit=crop",
-      ctaText: "View Circulars",
+      ctaText: "View Photo Gallery",
+      ctaLink: "/gallery",
+    },
+    {
+      title: "Official Notifications, Rulebooks & Circulars",
+      subtitle: "Access official guidelines, affiliation forms, and state technical regulations approved by the State Association.",
+      imageUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1600&auto=format&fit=crop",
+      ctaText: "Download Circulars",
       ctaLink: "/downloads",
     },
   ];
