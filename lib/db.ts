@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/rajasthan_sport";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable inside .env");
+  throw new Error(
+    "MONGODB_URI is not set. Add it to your .env file locally or to your Vercel environment variables."
+  );
 }
 
 interface MongooseCache {
@@ -32,7 +34,7 @@ export async function connectDB(): Promise<typeof mongoose> {
       bufferCommands: false,
     };
 
-    cached!.promise = mongoose.connect(MONGODB_URI, opts).then((m) => {
+    cached!.promise = mongoose.connect(MONGODB_URI as string, opts).then((m) => {
       return m;
     });
   }
