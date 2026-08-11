@@ -1,8 +1,10 @@
 import { MapPin, Mail, Phone, PhoneCall, Building } from "lucide-react";
+import BackButton from "@/components/public/BackButton";
 
 export default function ContactPage() {
   return (
     <div className="space-y-10 py-8 max-w-7xl mx-auto px-4">
+      <BackButton />
       <div className="bg-navy-950 text-white p-8 md:p-10 rounded-2xl shadow-xl border-t-4 border-saffron-500">
         <span className="text-saffron-400 text-xs font-bold uppercase tracking-wider block mb-1">
           State Secretariat

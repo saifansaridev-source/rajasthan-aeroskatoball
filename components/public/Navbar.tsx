@@ -22,6 +22,8 @@ export default function Navbar() {
     { label: "About Us", href: "/about" },
     { label: "Tournaments & Events", href: "/events" },
     { label: "Gallery", href: "/gallery" },
+    { label: "Articles", href: "/articles" },
+    { label: "Leaders", href: "/leaders" },
     { label: "Circulars & Downloads", href: "/downloads" },
     { label: "Contact Us", href: "/contact" },
   ];

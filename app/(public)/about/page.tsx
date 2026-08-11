@@ -1,8 +1,10 @@
 import { ShieldCheck, Award, CheckCircle } from "lucide-react";
+import BackButton from "@/components/public/BackButton";
 
 export default function AboutPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <BackButton />
       {/* Header Banner */}
       <div className="bg-navy-950 text-white rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-xl border-t-4 border-saffron-500">
         <div className="max-w-3xl space-y-4">

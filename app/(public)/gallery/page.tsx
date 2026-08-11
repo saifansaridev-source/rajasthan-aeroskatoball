@@ -1,8 +1,9 @@
 import connectDB from "@/lib/db";
 import { GalleryItem } from "@/models";
 import { Image as ImageIcon } from "lucide-react";
+import BackButton from "@/components/public/BackButton";
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function GalleryPage() {
   await connectDB();
@@ -13,6 +14,7 @@ export default async function GalleryPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <BackButton />
       <div className="text-center space-y-2 max-w-2xl mx-auto">
         <span className="text-xs font-bold uppercase tracking-wider text-saffron-600">Media Center</span>
         <h1 className="text-3xl font-black text-navy-950">Championship Photo Gallery</h1>

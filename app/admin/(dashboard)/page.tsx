@@ -3,7 +3,7 @@ import { Circular, GalleryItem, Event } from "@/models";
 import { Download, Image as ImageIcon, Calendar, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardOverview() {
   await connectDB();

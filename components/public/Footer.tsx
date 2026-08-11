@@ -4,8 +4,8 @@ import { Trophy, MapPin, Mail, Phone, Lock } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="bg-navy-950 text-slate-300 pt-12 pb-6 border-t-4 border-saffron-500">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-        
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+
         {/* Col 1: About & Incorporation */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
@@ -34,9 +34,11 @@ export default function Footer() {
           <ul className="space-y-2 text-xs">
             <li><Link href="/" className="hover:text-saffron-400 transition">Home</Link></li>
             <li><Link href="/about" className="hover:text-saffron-400 transition">About the Association</Link></li>
-            <li><Link href="/events" className="hover:text-saffron-400 transition">State Championships & Events</Link></li>
-            <li><Link href="/gallery" className="hover:text-saffron-400 transition">Media & Photo Gallery</Link></li>
-            <li><Link href="/downloads" className="hover:text-saffron-400 transition">Circulars & Downloads</Link></li>
+            <li><Link href="/events" className="hover:text-saffron-400 transition">State Championships &amp; Events</Link></li>
+            <li><Link href="/gallery" className="hover:text-saffron-400 transition">Media &amp; Photo Gallery</Link></li>
+            <li><Link href="/articles" className="hover:text-saffron-400 transition">Articles &amp; Blog</Link></li>
+            <li><Link href="/leaders" className="hover:text-saffron-400 transition">Association Leaders</Link></li>
+            <li><Link href="/downloads" className="hover:text-saffron-400 transition">Circulars &amp; Downloads</Link></li>
             <li><Link href="/contact" className="hover:text-saffron-400 transition">Contact Us</Link></li>
           </ul>
         </div>
@@ -65,8 +67,8 @@ export default function Footer() {
               <span>+91 94140 12345 / +91 98290 44444</span>
             </li>
             <li className="pt-2">
-              <Link 
-                href="/admin/login" 
+              <Link
+                href="/admin/login"
                 className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white bg-navy-900 border border-navy-800 px-3 py-1.5 rounded"
               >
                 <Lock className="w-3.5 h-3.5 text-saffron-400" />
@@ -76,11 +78,27 @@ export default function Footer() {
           </ul>
         </div>
 
+        {/* Col 4: Legal */}
+        <div>
+          <h4 className="text-white text-sm font-bold tracking-wider uppercase mb-4 pb-2 border-b border-navy-800 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-saffron-500"></span> Legal
+          </h4>
+          <ul className="space-y-2 text-xs">
+            <li><Link href="/privacy-policy" className="hover:text-saffron-400 transition">Privacy Policy</Link></li>
+            <li><Link href="/terms" className="hover:text-saffron-400 transition">Terms &amp; Conditions</Link></li>
+          </ul>
+        </div>
+
       </div>
 
       {/* Bottom Legal bar */}
       <div className="max-w-7xl mx-auto px-4 pt-6 border-t border-navy-900 text-xs flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400">
         <p>© {new Date().getFullYear()} Rajasthan Aeroskatoball Association. All Rights Reserved.</p>
+        <div className="flex items-center gap-4">
+          <Link href="/privacy-policy" className="hover:text-saffron-400 transition">Privacy Policy</Link>
+          <span>·</span>
+          <Link href="/terms" className="hover:text-saffron-400 transition">Terms &amp; Conditions</Link>
+        </div>
       </div>
     </footer>
   );

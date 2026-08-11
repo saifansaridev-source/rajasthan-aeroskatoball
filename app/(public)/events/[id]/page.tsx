@@ -5,7 +5,7 @@ import { Calendar, MapPin, Download, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function EventDetailPage({ params }: { params: { id: string } }) {
   await connectDB();

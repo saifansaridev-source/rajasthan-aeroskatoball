@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ArrowRight, Trophy, Download, Calendar, Image as ImageIcon } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
-export const revalidate = 60; // ISR 60s
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   await connectDB();
