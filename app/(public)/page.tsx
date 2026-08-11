@@ -10,13 +10,25 @@ import { formatDate } from "@/lib/utils";
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  await connectDB();
+  let circulars: any[] = [];
+  let events: any[] = [];
+  let gallery: any[] = [];
 
-  const [circulars, events, gallery] = await Promise.all([
-    Circular.find().sort({ publishDate: -1 }).limit(8).lean(),
-    Event.find().sort({ startDate: 1 }).limit(6).lean(),
-    GalleryItem.find({ type: "PHOTO" }).sort({ createdAt: -1 }).limit(6).lean(),
-  ]);
+  try {
+    const conn = await connectDB();
+    if (conn) {
+      const [cData, eData, gData] = await Promise.all([
+        Circular.find().sort({ publishDate: -1 }).limit(8).lean(),
+        Event.find().sort({ startDate: 1 }).limit(6).lean(),
+        GalleryItem.find({ type: "PHOTO" }).sort({ createdAt: -1 }).limit(6).lean(),
+      ]);
+      circulars = cData;
+      events = eData;
+      gallery = gData;
+    }
+  } catch (err) {
+    console.error("HomePage database fetch error:", err);
+  }
 
   const serialize = (items: any[]) => JSON.parse(JSON.stringify(items));
   const serializedCirculars = serialize(circulars);

@@ -6,8 +6,16 @@ import BackButton from "@/components/public/BackButton";
 export const dynamic = 'force-dynamic';
 
 export default async function GalleryPage() {
-  await connectDB();
-  const items = await GalleryItem.find().sort({ createdAt: -1 }).lean();
+  let items: any[] = [];
+
+  try {
+    const conn = await connectDB();
+    if (conn) {
+      items = await GalleryItem.find().sort({ createdAt: -1 }).lean();
+    }
+  } catch (err) {
+    console.error("GalleryPage DB error:", err);
+  }
 
   const serialize = (items: any[]) => JSON.parse(JSON.stringify(items));
   const photos = serialize(items.filter((i: any) => i.type === "PHOTO" || !i.type));

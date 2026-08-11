@@ -8,13 +8,15 @@ import { formatDate } from "@/lib/utils";
 export const dynamic = 'force-dynamic';
 
 export default async function EventDetailPage({ params }: { params: { id: string } }) {
-  await connectDB();
   let event: any = null;
 
   try {
-    event = await Event.findById(params.id).lean();
+    const conn = await connectDB();
+    if (conn) {
+      event = await Event.findById(params.id).lean();
+    }
   } catch (err) {
-    notFound();
+    console.error("EventDetailPage DB error:", err);
   }
 
   if (!event) {

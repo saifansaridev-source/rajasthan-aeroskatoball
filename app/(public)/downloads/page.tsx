@@ -7,8 +7,16 @@ import BackButton from "@/components/public/BackButton";
 export const dynamic = 'force-dynamic';
 
 export default async function DownloadsPage() {
-  await connectDB();
-  const circulars = await Circular.find().sort({ publishDate: -1 }).lean();
+  let circulars: any[] = [];
+
+  try {
+    const conn = await connectDB();
+    if (conn) {
+      circulars = await Circular.find().sort({ publishDate: -1 }).lean();
+    }
+  } catch (err) {
+    console.error("DownloadsPage DB error:", err);
+  }
 
   const serialize = (items: any[]) => JSON.parse(JSON.stringify(items));
   const serializedCirculars = serialize(circulars);

@@ -6,16 +6,31 @@ import Link from "next/link";
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardOverview() {
-  await connectDB();
+  let totalCirculars = 0;
+  let totalGallery = 0;
+  let totalEvents = 0;
+  let recentCirculars: any[] = [];
+  let recentEvents: any[] = [];
 
-  const [totalCirculars, totalGallery, totalEvents] = await Promise.all([
-    Circular.countDocuments(),
-    GalleryItem.countDocuments(),
-    Event.countDocuments(),
-  ]);
-
-  const recentCirculars = await Circular.find().sort({ createdAt: -1 }).limit(5).lean();
-  const recentEvents = await Event.find().sort({ startDate: -1 }).limit(5).lean();
+  try {
+    const conn = await connectDB();
+    if (conn) {
+      const [cCount, gCount, eCount, circularsData, eventsData] = await Promise.all([
+        Circular.countDocuments(),
+        GalleryItem.countDocuments(),
+        Event.countDocuments(),
+        Circular.find().sort({ createdAt: -1 }).limit(5).lean(),
+        Event.find().sort({ startDate: -1 }).limit(5).lean(),
+      ]);
+      totalCirculars = cCount;
+      totalGallery = gCount;
+      totalEvents = eCount;
+      recentCirculars = circularsData;
+      recentEvents = eventsData;
+    }
+  } catch (err) {
+    console.error("AdminDashboard DB error:", err);
+  }
 
   return (
     <div className="space-y-8">
