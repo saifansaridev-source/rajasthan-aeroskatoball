@@ -1,341 +1,422 @@
-import connectDB from "@/lib/db";
-import { Circular, Event, GalleryItem } from "@/models";
-import HeroSlider from "@/components/public/HeroSlider";
-import CircularTicker from "@/components/public/CircularTicker";
-import EventCard from "@/components/public/EventCard";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Trophy, Download, Calendar, Image as ImageIcon } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { 
+  Trophy, 
+  Users, 
+  MapPin, 
+  Calendar, 
+  ArrowRight, 
+  Sparkles, 
+  Award, 
+  ShieldCheck, 
+  Play, 
+  ExternalLink,
+  ChevronRight,
+  FileText,
+  Clock,
+  CheckCircle2,
+  X
+} from "lucide-react";
+import HeroSlider from "@/components/public/HeroSlider";
+import SponsorStrip from "@/components/public/SponsorStrip";
+import { initialChampionships, initialNews, initialGallery, initialCommittee } from "@/lib/data-store";
+import { useI18n } from "@/lib/i18n";
 
-export const dynamic = 'force-dynamic';
+export default function HomePage() {
+  const { t } = useI18n();
+  const [activeMediaModal, setActiveMediaModal] = useState<string | null>(null);
 
-export default async function HomePage() {
-  let circulars: any[] = [];
-  let events: any[] = [];
-  let gallery: any[] = [];
-
-  try {
-    const conn = await connectDB();
-    if (conn) {
-      const [cData, eData, gData] = await Promise.all([
-        Circular.find().sort({ publishDate: -1 }).limit(8).lean(),
-        Event.find().sort({ startDate: 1 }).limit(6).lean(),
-        GalleryItem.find({ type: "PHOTO" }).sort({ createdAt: -1 }).limit(6).lean(),
-      ]);
-      circulars = cData;
-      events = eData;
-      gallery = gData;
-    }
-  } catch (err) {
-    console.error("HomePage database fetch error:", err);
-  }
-
-  // Fallback rich content when DB records are empty
-  const defaultEvents = [
-    {
-      _id: "evt-1",
-      title: "5th Rajasthan State Aeroskatoball Championship 2026",
-      description: "Official state-level championship for Junior & Senior categories. Winners qualify for National Trials.",
-      startDate: "2026-09-15",
-      endDate: "2026-09-18",
-      venue: "Sawai Mansingh Indoor Stadium",
-      district: "Jaipur",
-      discipline: "State Championship 🏆",
-      image: "https://images.unsplash.com/photo-1547447134-cd3f5c716030?q=80&w=800&auto=format&fit=crop",
-      brochureUrl: "#"
-    },
-    {
-      _id: "evt-2",
-      title: "All-Rajasthan Sub-Junior Selection Trial & Speed Cup",
-      description: "State selection trial for sub-junior athletes under 14 years. District entry forms required.",
-      startDate: "2026-10-02",
-      endDate: "2026-10-04",
-      venue: "Maharana Pratap Sports Complex",
-      district: "Udaipur",
-      discipline: "Selection Trial 🎯",
-      image: "https://images.unsplash.com/photo-1517649763962-0c623266010b?q=80&w=800&auto=format&fit=crop",
-      brochureUrl: "#"
-    },
-    {
-      _id: "evt-3",
-      title: "Western Zone Inter-District Aeroskatoball Cup",
-      description: "Inter-district tournament bringing top 16 district teams across Western Rajasthan.",
-      startDate: "2026-11-10",
-      endDate: "2026-11-12",
-      venue: "Barkatullah Khan Stadium Complex",
-      district: "Jodhpur",
-      discipline: "Inter-District ⚡",
-      image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800&auto=format&fit=crop",
-      brochureUrl: "#"
-    }
+  // Live Statistics
+  const stats = [
+    { label: t("statPlayers"), count: "1,480+", icon: Users, color: "from-blue-600 to-blue-800" },
+    { label: t("statCoaches"), count: "125+", icon: Award, color: "from-orange-500 to-amber-600" },
+    { label: t("statDistricts"), count: "50 Units", icon: MapPin, color: "from-emerald-600 to-teal-700" },
+    { label: t("statClubs"), count: "86+", icon: ShieldCheck, color: "from-purple-600 to-indigo-800" },
+    { label: t("statChampionships"), count: "18 State Events", icon: Trophy, color: "from-rose-500 to-red-700" },
+    { label: t("statMedals"), count: "340+ Medals", icon: Sparkles, color: "from-amber-500 to-yellow-600" },
   ];
-
-  const defaultCirculars = [
-    {
-      _id: "circ-1",
-      title: "Official Notification: 5th Rajasthan State Championship Dates & Venue",
-      description: "Guidelines, eligibility criteria, category details, and registration deadline for Jaipur State Championship.",
-      category: "NOTIFICATION",
-      publishDate: "2026-08-01",
-      fileUrl: "#"
-    },
-    {
-      _id: "circ-2",
-      title: "Official Aeroskatoball Rulebook & Technical Regulations (2026 Edition)",
-      description: "Updated international competition rules, court dimensions, gear standards, and scoring matrix.",
-      category: "RULEBOOK",
-      publishDate: "2026-07-20",
-      fileUrl: "#"
-    },
-    {
-      _id: "circ-3",
-      title: "District Association Affiliation & Athlete ID Registration Form",
-      description: "Mandatory affiliation renewal form for all 33 district aeroskatoball associations in Rajasthan.",
-      category: "AFFILIATION",
-      publishDate: "2026-07-10",
-      fileUrl: "#"
-    }
-  ];
-
-  const defaultGallery = [
-    {
-      _id: "gal-1",
-      title: "Olympic Roller Sports & Skate Showcase",
-      albumName: "OLYMPIC HIGHLIGHTS 🏅",
-      url: "https://images.unsplash.com/photo-1547447134-cd3f5c716030?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      _id: "gal-2",
-      title: "High-Speed Arena Action & Goal Moments",
-      albumName: "STATE CHAMPIONSHIPS 🏆",
-      url: "https://images.unsplash.com/photo-1517649763962-0c623266010b?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      _id: "gal-3",
-      title: "State Medal Ceremony & Award Presentation",
-      albumName: "MEDAL CEREMONY 🥇",
-      url: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      _id: "gal-4",
-      title: "Sub-Junior Selection Trial Drills",
-      albumName: "SELECTION TRIALS 🎯",
-      url: "https://images.unsplash.com/photo-1565992441121-4367c2967103?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      _id: "gal-5",
-      title: "Olympic Standard Training Arena",
-      albumName: "INFRASTRUCTURE 🏟️",
-      url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      _id: "gal-6",
-      title: "Team Rajasthan Victory Celebration",
-      albumName: "NATIONAL TRIUMPH 🎉",
-      url: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=800&auto=format&fit=crop"
-    }
-  ];
-
-  const serialize = (items: any[]) => JSON.parse(JSON.stringify(items));
-  const serializedCirculars = circulars.length > 0 ? serialize(circulars) : defaultCirculars;
-  const serializedEvents = events.length > 0 ? serialize(events) : defaultEvents;
-  const serializedGallery = gallery.length > 0 ? serialize(gallery) : defaultGallery;
 
   return (
-    <div className="space-y-12 pb-12">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-[#F5F7FA]">
+      
+      {/* 5.1 HERO SLIDER */}
       <HeroSlider />
 
-      {/* Circulars Marquee / Announcement Ticker */}
-      <CircularTicker circulars={serializedCirculars} />
-
-      {/* Quick Access Badges */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          <Link href="/downloads" className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-saffron-500 transition group">
-            <div className="p-3 bg-saffron-50 rounded-xl text-saffron-600 group-hover:scale-110 transition">
-              <Download className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-lg font-black text-navy-950">Official Circulars</p>
-              <p className="text-xs font-semibold text-slate-500">Download Notifications & Rulebooks</p>
-            </div>
-          </Link>
-
-          <Link href="/events" className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-saffron-500 transition group">
-            <div className="p-3 bg-blue-50 rounded-xl text-blue-600 group-hover:scale-110 transition">
-              <Calendar className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-lg font-black text-navy-950">State Championships</p>
-              <p className="text-xs font-semibold text-slate-500">View Upcoming Tournaments & Trials</p>
-            </div>
-          </Link>
-
-          <Link href="/gallery" className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-saffron-500 transition group">
-            <div className="p-3 bg-emerald-50 rounded-xl text-emerald-600 group-hover:scale-110 transition">
-              <ImageIcon className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-lg font-black text-navy-950">Media & Gallery</p>
-              <p className="text-xs font-semibold text-slate-500">Olympic Photos & Highlights</p>
-            </div>
-          </Link>
-        </div>
-      </div>
-
-      {/* Association Stats Banner */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-navy-950 via-navy-900 to-navy-950 rounded-2xl p-8 text-white shadow-xl border border-navy-800 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div className="space-y-1">
-            <p className="text-3xl lg:text-4xl font-black text-saffron-400">33</p>
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-300">Districts Covered</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-3xl lg:text-4xl font-black text-saffron-400">15,000+</p>
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-300">Registered Athletes</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-3xl lg:text-4xl font-black text-saffron-400">48+</p>
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-300">State Championships</p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-3xl lg:text-4xl font-black text-saffron-400">120+</p>
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-300">Accredited Coaches</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content Grid: Upcoming Events & Announcements */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Events (2 cols) */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex justify-between items-end border-b border-slate-200 pb-3">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-saffron-600">State Championships</span>
-              <h2 className="text-2xl font-black text-navy-950">Upcoming Tournaments & Events</h2>
-            </div>
-            <Link href="/events" className="text-xs font-bold text-saffron-600 hover:text-saffron-700 flex items-center gap-1">
-              View All Events <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {serializedEvents.map((event: any) => (
-              <EventCard key={event._id} event={event} />
-            ))}
-          </div>
-        </div>
-
-        {/* Right Column: Recent Announcements & Circulars (1 col) */}
-        <div className="space-y-6">
-          <div className="border-b border-slate-200 pb-3 flex justify-between items-end">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-saffron-600">Official Notices</span>
-              <h2 className="text-2xl font-black text-navy-950">Recent Circulars</h2>
-            </div>
-            <Link href="/downloads" className="text-xs font-bold text-saffron-600 hover:underline">
-              View All
-            </Link>
-          </div>
-
-          <div className="space-y-3">
-            {serializedCirculars.map((item: any) => (
-              <div key={item._id} className="bg-white p-4 rounded-xl border border-slate-200 hover:shadow-md transition space-y-2">
-                <div className="flex justify-between items-center text-[10px]">
-                  <span className="font-bold text-saffron-600 uppercase tracking-wider">
-                    {item.category || "CIRCULAR"}
-                  </span>
-                  <span className="text-slate-400 font-mono">
-                    {formatDate(item.publishDate || item.createdAt || "2026-08-01")}
-                  </span>
+      {/* 5.3 LIVE STATISTICS (GLASS-CARD ANIMATED COUNTERS) */}
+      <section className="relative -mt-10 z-20 max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+          {stats.map((stat, idx) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={idx}
+                className="glass-card hover:bg-white rounded-2xl p-4 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl border border-white/80 flex flex-col items-center text-center group"
+              >
+                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white mb-2 shadow-md group-hover:scale-110 transition`}>
+                  <Icon className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-navy-950 text-xs hover:text-saffron-600 transition leading-snug">
-                  {item.title}
-                </h3>
-                {item.description && (
-                  <p className="text-[11px] text-slate-500 line-clamp-2">{item.description}</p>
-                )}
-                <div className="pt-1">
-                  <a
-                    href={item.fileUrl || "/downloads"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 bg-saffron-50 text-saffron-700 hover:bg-saffron-100 border border-saffron-200 px-3 py-1.5 rounded-lg text-[11px] font-bold transition"
-                  >
-                    <Download className="w-3.5 h-3.5" /> Download PDF
-                  </a>
+                <div className="text-xl md:text-2xl font-black text-[#0A3D91] tracking-tight">
+                  {stat.count}
+                </div>
+                <div className="text-[11px] font-semibold text-slate-600 mt-0.5 leading-tight">
+                  {stat.label}
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
-      </div>
+      </section>
 
-      {/* Olympic & International Showcase Banner */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden bg-slate-900 text-white p-8 md:p-12 shadow-2xl">
-          <img
-            src="https://images.unsplash.com/photo-1517649763962-0c623266010b?q=80&w=1600&auto=format&fit=crop"
-            alt="Olympic Games & World Championships"
-            className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-overlay"
-          />
-          <div className="relative max-w-2xl space-y-4">
-            <span className="bg-saffron-500 text-white text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-md">
-              Olympic Vision 🏅
-            </span>
-            <h2 className="text-2xl md:text-4xl font-black text-white leading-tight">
-              Preparing Rajasthan Athletes for Olympic & World Championships
-            </h2>
-            <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
-              The Rajasthan Aeroskatoball Association is committed to world-class coaching, international-standard rinks, and high-performance selection trials to nurture future Olympians from Rajasthan.
-            </p>
-            <div className="pt-2 flex flex-wrap gap-3">
+      {/* 5.2 ABOUT SECTION & PRESIDENT'S MESSAGE */}
+      <section className="py-16 max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+          
+          {/* Left Column: About RAA Overview */}
+          <div className="lg:col-span-7 flex flex-col justify-between bg-white rounded-3xl p-8 md:p-10 shadow-lg border border-slate-100 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-blue-50 rounded-full blur-2xl -mr-16 -mt-16 pointer-events-none" />
+            
+            <div>
+              <div className="inline-flex items-center gap-2 bg-blue-50 text-[#0A3D91] px-3.5 py-1 rounded-full text-xs font-bold mb-4">
+                <ShieldCheck className="w-4 h-4 text-[#F57C00]" />
+                <span>Section 8 Not-For-Profit Sports Body</span>
+              </div>
+
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-[#0A3D91] tracking-tight leading-tight">
+                Pioneering the Sport of <span className="text-[#F57C00]">Aeroskatoball</span> in Rajasthan
+              </h2>
+
+              <p className="mt-4 text-slate-600 text-sm leading-relaxed">
+                The <strong>Rajasthan Aeroskatoball Association (RAA)</strong> is the apex governing body responsible for regulating, promoting, and advancing the high-octane sport of Aeroskatoball across all 50 districts of Rajasthan.
+              </p>
+
+              <p className="mt-3 text-slate-600 text-sm leading-relaxed">
+                Combining the agility of inline skating, precision ball control, and aerial shooting techniques, our association fosters grassroots talent, organizes sanctioned state championships, certifies coaches and technical officials, and equips athletes for national glory under the Aeroskatoball Federation of India (AFI).
+              </p>
+
+              {/* Key Pillars */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+                <div className="flex items-center gap-2.5 text-xs font-bold text-slate-800 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>State & National Selection Trials</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs font-bold text-slate-800 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Certified Coaching Academies</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs font-bold text-slate-800 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>QR-Verified Digital Player Cards</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs font-bold text-slate-800 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Gender Inclusive Programs</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-8 mt-6 border-t border-slate-100 flex flex-wrap items-center gap-4">
               <Link
-                href="/gallery"
-                className="bg-saffron-500 hover:bg-saffron-600 text-white font-bold text-xs md:text-sm px-6 py-3 rounded-xl shadow-lg transition flex items-center gap-2"
+                href="/about"
+                className="inline-flex items-center gap-2 bg-[#0A3D91] hover:bg-[#083279] text-white px-6 py-3 rounded-xl text-xs font-bold shadow-md transition"
               >
-                View Olympic Gallery <ArrowRight className="w-4 h-4" />
+                <span>{t("readMore")}</span>
+                <ArrowRight className="w-4 h-4 text-[#F57C00]" />
               </Link>
               <Link
-                href="/leaders"
-                className="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-xs md:text-sm px-5 py-3 rounded-xl backdrop-blur-xs transition"
+                href="/downloads"
+                className="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-3 rounded-xl text-xs font-bold transition"
               >
-                Meet Association Leaders
+                <FileText className="w-4 h-4 text-[#0A3D91]" />
+                <span>Association Constitution (PDF)</span>
               </Link>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Gallery Showcase */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-4">
-        <div className="flex justify-between items-end border-b border-slate-200 pb-3">
+          {/* Right Column: President's Message Block */}
+          <div className="lg:col-span-5 bg-gradient-to-br from-[#0A3D91] to-[#041c49] text-white rounded-3xl p-8 shadow-xl relative overflow-hidden flex flex-col justify-between">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#F57C00]/20 rounded-full blur-2xl pointer-events-none" />
+            
+            <div>
+              <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+                <div>
+                  <span className="text-[#F57C00] font-extrabold text-xs uppercase tracking-wider block">
+                    Leadership Note
+                  </span>
+                  <h3 className="text-xl font-black text-white">{t("presidentsMessage")}</h3>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Award className="w-5 h-5 text-[#F57C00]" />
+                </div>
+              </div>
+
+              {/* President Photo & Intro */}
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-[#F57C00] shadow-md shrink-0">
+                  <img
+                    src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&auto=format&fit=crop&q=80"
+                    alt="President Dr. Arvind Singh"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-base font-bold text-white leading-tight">Dr. Arvind Singh</h4>
+                  <p className="text-xs text-orange-300 font-semibold">President, RAA</p>
+                  <p className="text-[11px] text-blue-200">Affiliated to AFI &bull; Bharatpur (Raj.)</p>
+                </div>
+              </div>
+
+              <blockquote className="text-xs text-slate-200 leading-relaxed italic relative pl-4 border-l-2 border-[#F57C00]">
+                &ldquo;Our vision is to empower every young skater and athlete in Rajasthan with world-class facilities, ethical training, and transparent competitive platforms. Aeroskatoball combines agility with aerial strategy, and Rajasthan&apos;s youth are destined to lead this revolution on the national and global stage.&rdquo;
+              </blockquote>
+            </div>
+
+            {/* Signature Block */}
+            <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+              <div>
+                <div className="text-[11px] text-slate-400">Digital Seal & Verification</div>
+                <div className="text-xs font-mono font-bold text-[#F57C00]">RAA/EXEC/OFFICIAL-SEAL</div>
+              </div>
+              <div className="bg-white/10 px-3 py-1.5 rounded-lg border border-white/20 text-[10px] font-bold text-white">
+                OFFICIAL AUTHORIZED
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 5.5 UPCOMING CHAMPIONSHIPS TABLE */}
+      <section className="py-12 bg-slate-100/70 border-y border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+              <span className="text-xs font-extrabold text-[#F57C00] uppercase tracking-wider">
+                Sanctioned State Events
+              </span>
+              <h2 className="text-2xl md:text-3xl font-black text-[#0A3D91] tracking-tight">
+                {t("upcomingChampionships")}
+              </h2>
+            </div>
+            <Link
+              href="/events"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0A3D91] hover:text-[#F57C00] transition"
+            >
+              <span>View Full Calendar & Results</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Table Layout */}
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/80 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#0A3D91] text-white text-xs font-bold uppercase tracking-wider">
+                    <th className="py-3.5 px-6">Championship</th>
+                    <th className="py-3.5 px-6">Venue / District</th>
+                    <th className="py-3.5 px-6">Event Dates</th>
+                    <th className="py-3.5 px-6">Age Category</th>
+                    <th className="py-3.5 px-6 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs">
+                  {initialChampionships.map((champ) => (
+                    <tr key={champ.id} className="hover:bg-blue-50/50 transition">
+                      <td className="py-4 px-6 font-bold text-slate-900">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center text-[#0A3D91] shrink-0 font-black">
+                            <Trophy className="w-4 h-4 text-[#F57C00]" />
+                          </div>
+                          <div>
+                            <div className="font-bold text-slate-900 leading-snug">{champ.title}</div>
+                            <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase mt-1 ${
+                              champ.status === "UPCOMING" ? "bg-emerald-100 text-emerald-800" :
+                              champ.status === "ONGOING" ? "bg-amber-100 text-amber-800" :
+                              "bg-slate-100 text-slate-700"
+                            }`}>
+                              {champ.status}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6 text-slate-700">
+                        <div className="flex items-center gap-1.5 font-medium">
+                          <MapPin className="w-3.5 h-3.5 text-[#F57C00] shrink-0" />
+                          <span>{champ.venue}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6 font-medium text-slate-700">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                          <span>{champ.startDate} to {champ.endDate}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6 font-semibold text-slate-600">
+                        {champ.ageGroup}
+                      </td>
+                      <td className="py-4 px-6 text-right">
+                        <Link
+                          href="/register"
+                          className="inline-flex items-center gap-1 bg-[#F57C00] hover:bg-[#e56715] text-white font-bold px-4 py-2 rounded-xl text-xs shadow transition"
+                        >
+                          <span>Register</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5.4 LATEST NEWS & NOTIFICATIONS */}
+      <section className="py-16 max-w-7xl mx-auto px-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-saffron-600">Action Moments</span>
-            <h2 className="text-2xl font-black text-navy-950">Championship & Olympic Gallery Highlights</h2>
+            <span className="text-xs font-extrabold text-[#F57C00] uppercase tracking-wider">
+              Official Media & Announcements
+            </span>
+            <h2 className="text-2xl md:text-3xl font-black text-[#0A3D91] tracking-tight">
+              {t("latestNews")}
+            </h2>
           </div>
-          <Link href="/gallery" className="text-xs font-bold text-saffron-600 hover:text-saffron-700 flex items-center gap-1">
-            View Full Gallery <ArrowRight className="w-3.5 h-3.5" />
+          <Link
+            href="/news"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0A3D91] hover:text-[#F57C00] transition"
+          >
+            <span>View All News & Circulars</span>
+            <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {serializedGallery.map((photo: any) => (
-            <Link key={photo._id} href="/gallery" className="relative rounded-xl overflow-hidden border border-slate-200 group h-40 bg-slate-900 shadow-xs">
-              <img
-                src={photo.url}
-                alt={photo.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 md:opacity-0 group-hover:opacity-100 transition p-2.5 flex flex-col justify-end">
-                <span className="text-[9px] font-bold text-saffron-400 uppercase">{photo.albumName || "HIGHLIGHTS"}</span>
-                <p className="text-[11px] text-white font-bold truncate leading-tight">{photo.title}</p>
+        {/* News Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {initialNews.map((article) => (
+            <div
+              key={article.id}
+              className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col justify-between group"
+            >
+              <div>
+                <div className="relative h-44 w-full overflow-hidden bg-slate-200">
+                  <img
+                    src={article.image || "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&auto=format&fit=crop&q=80"}
+                    alt={article.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#0A3D91]/90 backdrop-blur-xs text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase">
+                    {article.category}
+                  </div>
+                </div>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 text-[11px] text-slate-400 mb-2 font-medium">
+                    <Clock className="w-3.5 h-3.5 text-[#F57C00]" />
+                    <span>{article.publishDate}</span>
+                  </div>
+                  <h3 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-[#0A3D91] transition line-clamp-2">
+                    {article.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-2 line-clamp-3 leading-relaxed">
+                    {article.excerpt}
+                  </p>
+                </div>
               </div>
-            </Link>
+
+              <div className="p-5 pt-0">
+                <Link
+                  href="/news"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F57C00] group-hover:text-[#0A3D91] transition"
+                >
+                  <span>Read Full Article</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
-      </div>
+      </section>
+
+      {/* 5.6 GALLERY PREVIEW (PHOTOS + VIDEOS LIGHTBOX) */}
+      <section className="py-14 bg-gradient-to-b from-[#031232] to-[#0A3D91] text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+            <div>
+              <span className="text-xs font-extrabold text-[#F57C00] uppercase tracking-wider">
+                Photo & Video Moments
+              </span>
+              <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                {t("galleryPreview")}
+              </h2>
+            </div>
+            <Link
+              href="/gallery"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-400 hover:text-orange-300 transition"
+            >
+              <span>Explore Complete Gallery</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Mixed Photos + Video Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {initialGallery.slice(0, 6).map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setActiveMediaModal(item.url)}
+                className="relative h-60 rounded-2xl overflow-hidden group cursor-pointer shadow-xl border border-white/10 bg-slate-900"
+              >
+                <img
+                  src={item.thumbnail}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition duration-500 brightness-90 group-hover:brightness-100"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-bold uppercase text-[#F57C00] tracking-wider block">
+                        {item.albumName}
+                      </span>
+                      <h4 className="text-xs font-bold text-white line-clamp-1">{item.title}</h4>
+                    </div>
+                    {item.type === "VIDEO" && (
+                      <div className="w-8 h-8 rounded-full bg-[#F57C00] flex items-center justify-center text-white shadow-lg shrink-0">
+                        <Play className="w-4 h-4 fill-white ml-0.5" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5.7 SPONSORS & AFFILIATIONS AUTO-SCROLLING STRIP */}
+      <SponsorStrip />
+
+      {/* LIGHTBOX MEDIA MODAL */}
+      {activeMediaModal && (
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="relative max-w-4xl w-full bg-black rounded-2xl overflow-hidden shadow-2xl">
+            <button
+              onClick={() => setActiveMediaModal(null)}
+              className="absolute top-4 right-4 z-10 bg-black/60 hover:bg-[#F57C00] text-white p-2 rounded-full transition"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <img
+              src={activeMediaModal}
+              alt="High resolution championship view"
+              className="w-full max-h-[80vh] object-contain"
+            />
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
