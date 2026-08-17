@@ -30,10 +30,12 @@ export default function Footer() {
           {/* Column 1: Association Profile */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0A3D91] to-[#F57C00] p-0.5 shadow-lg">
-                <div className="w-full h-full bg-[#031232] rounded-[14px] flex items-center justify-center p-1">
-                  <Trophy className="w-6 h-6 text-[#F57C00]" />
-                </div>
+              <div className="w-12 h-12 rounded-full overflow-hidden shadow-lg border border-white/20 bg-white p-0.5 shrink-0 flex items-center justify-center">
+                <img
+                  src="/logo.png"
+                  alt="RAA Logo"
+                  className="w-full h-full object-contain rounded-full"
+                />
               </div>
               <div>
                 <span className="font-extrabold text-base tracking-tight text-white block leading-tight">

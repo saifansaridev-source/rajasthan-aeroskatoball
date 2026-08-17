@@ -105,9 +105,19 @@ export default function AboutPage() {
                 </div>
 
                 <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200/80 space-y-3">
-                  <h3 className="text-xs font-black uppercase text-[#0A3D91] tracking-wider">
-                    Official Corporate Profile
-                  </h3>
+                  <div className="flex items-center gap-3 pb-2 border-b border-slate-200">
+                    <img
+                      src="/logo.png"
+                      alt="RAA Official Emblem"
+                      className="w-12 h-12 rounded-full object-contain bg-white p-0.5 shadow-sm border border-slate-200 shrink-0"
+                    />
+                    <div>
+                      <h3 className="text-xs font-black uppercase text-[#0A3D91] tracking-wider">
+                        Official State Emblem
+                      </h3>
+                      <span className="text-[10px] text-slate-500 font-bold block">Rajasthan Aeroskatoball</span>
+                    </div>
+                  </div>
                   <div className="text-xs space-y-2 text-slate-600">
                     <div className="flex justify-between py-1 border-b border-slate-200">
                       <span className="font-semibold text-slate-500">Corporate Identification:</span>

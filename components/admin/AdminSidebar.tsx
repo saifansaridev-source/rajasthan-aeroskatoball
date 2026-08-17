@@ -39,8 +39,12 @@ export default function AdminSidebar() {
     <aside className="w-64 bg-[#031232] text-slate-300 flex flex-col shrink-0 min-h-screen border-r border-blue-950">
       {/* Brand Header */}
       <div className="p-4 border-b border-blue-950 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#0A3D91] to-[#F57C00] flex items-center justify-center text-white font-bold shadow">
-          <Trophy className="w-5 h-5" />
+        <div className="w-10 h-10 rounded-full overflow-hidden bg-white p-0.5 shrink-0 flex items-center justify-center shadow">
+          <img
+            src="/logo.png"
+            alt="RAA Admin"
+            className="w-full h-full object-contain rounded-full"
+          />
         </div>
         <div>
           <span className="text-xs font-black text-white block leading-tight">

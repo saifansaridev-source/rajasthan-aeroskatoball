@@ -136,10 +136,12 @@ export default function Navbar() {
             
             {/* Logo & Association Branding */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-13 h-13 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-[#0A3D91] via-[#083279] to-[#F57C00] p-0.5 shadow-md group-hover:scale-105 transition transform">
-                <div className="w-full h-full bg-white rounded-[14px] flex items-center justify-center p-2">
-                  <Trophy className="w-7 h-7 text-[#0A3D91] group-hover:text-[#F57C00] transition" />
-                </div>
+              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden shadow-md group-hover:scale-105 transition transform shrink-0 border border-slate-200 bg-white flex items-center justify-center p-0.5">
+                <img
+                  src="/logo.png"
+                  alt="Rajasthan Aeroskatoball Association (RAA)"
+                  className="w-full h-full object-contain rounded-full"
+                />
               </div>
               <div>
                 <span className="text-lg md:text-2xl font-black text-[#0A3D91] tracking-tight block leading-none">

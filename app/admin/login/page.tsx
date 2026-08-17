@@ -54,8 +54,12 @@ export default function AdminLoginPage() {
 
       <div className="w-full max-w-md bg-navy-900 border border-navy-800 rounded-2xl p-8 shadow-2xl space-y-6 text-slate-200">
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-full bg-saffron-500 flex items-center justify-center text-white mx-auto shadow-lg">
-            <Trophy className="w-8 h-8" />
+          <div className="w-16 h-16 rounded-full bg-white p-1 flex items-center justify-center mx-auto shadow-xl border border-white/20">
+            <img
+              src="/logo.png"
+              alt="RAA Logo"
+              className="w-full h-full object-contain rounded-full"
+            />
           </div>
           <h1 className="text-2xl font-black text-white">State Admin Portal</h1>
           <p className="text-xs text-slate-400">

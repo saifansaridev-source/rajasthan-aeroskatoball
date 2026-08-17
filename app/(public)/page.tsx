@@ -146,8 +146,12 @@ export default function HomePage() {
                   </span>
                   <h3 className="text-xl font-black text-white">{t("presidentsMessage")}</h3>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                  <Award className="w-5 h-5 text-[#F57C00]" />
+                <div className="w-12 h-12 rounded-full bg-white p-0.5 shadow-md flex items-center justify-center shrink-0">
+                  <img
+                    src="/logo.png"
+                    alt="RAA Seal"
+                    className="w-full h-full object-contain rounded-full"
+                  />
                 </div>
               </div>
 
